@@ -1,0 +1,2 @@
+language: scheme
+fprocess: racket -f index.rkt
