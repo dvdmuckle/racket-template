@@ -1,2 +1,2 @@
-language: scheme
+language: racket
 fprocess: racket -f index.rkt
