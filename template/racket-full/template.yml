@@ -1,2 +1,0 @@
-language: racket-full
-fprocess: racket index.rkt

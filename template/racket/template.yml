@@ -1,2 +1,2 @@
 language: racket
-fprocess: racket -f index.rkt
+fprocess: /root/function/bin/index

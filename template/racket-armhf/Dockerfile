@@ -1,23 +1,26 @@
-FROM dvdmuckle/racket:armhf
-
-# Alternatively use ADD https:// (which will not be cached by Docker builder)
-RUN apk --no-cache add curl \ 
-    && echo "Pulling watchdog binary from Github." \
-    && curl -sSL https://github.com/openfaas/faas/releases/download/0.7.1/fwatchdog-armhf > /usr/bin/fwatchdog \
-    && chmod +x /usr/bin/fwatchdog \
-    && apk del curl --no-cache
+FROM dvdmuckle/racket:armhf as builder
 
 WORKDIR /root/
 
 COPY index.rkt           .
 
 RUN mkdir -p function
-WORKDIR /root/function/
 
-WORKDIR /root/
 COPY function           function
+RUN raco exe index.rkt && raco distribute function index
 
-ENV fprocess="racket -f index.rkt"
+FROM alpine
+WORKDIR /root/
+COPY --from=builder /root/function function
+# Alternatively use ADD https:// (which will not be cached by Docker builder)
+RUN apk --no-cache add curl libffi \ 
+    && echo "Pulling watchdog binary from Github." \
+    && curl -sSL https://github.com/openfaas/faas/releases/download/0.7.1/fwatchdog > /usr/bin/fwatchdog \
+    && chmod +x /usr/bin/fwatchdog \
+    && apk del curl --no-cache
+
+
+ENV fprocess="/root/function/bin/index"
 
 HEALTHCHECK --interval=1s CMD [ -e /tmp/.lock ] || exit 1
 
