@@ -1,2 +1,2 @@
 language: racket-armhf
-fprocess: /root/function/bin/index
+fprocess: function/bin/index

@@ -20,7 +20,7 @@ RUN apk --no-cache add curl libffi \
     && apk del curl --no-cache
 
 
-ENV fprocess="/root/function/bin/index"
+ENV fprocess="function/bin/index"
 
 HEALTHCHECK --interval=1s CMD [ -e /tmp/.lock ] || exit 1
 

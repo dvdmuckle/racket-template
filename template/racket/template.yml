@@ -1,2 +1,2 @@
 language: racket
-fprocess: /root/function/bin/index
+fprocess: function/bin/index
